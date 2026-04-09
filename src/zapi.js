@@ -15,14 +15,12 @@ async function enviarTexto(telefone, mensagem) {
 
 async function enviarDocumento(telefone, driveId, nomeArquivo, legenda) {
   try {
-    const url = `https://drive.google.com/uc?export=download&confirm=t&id=${driveId}`;
-    console.log(`[ZAPI] Enviando doc para ${telefone} | ID: ${driveId}`);
-    const resp = await axios.post(`${config.zapi.baseUrl()}/send-file`,
-      { phone: telefone, file: url, fileName: nomeArquivo, caption: legenda || '' },
-      { headers: headers() });
-    console.log(`[ZAPI] ✅ Doc resp:`, JSON.stringify(resp.data));
+    const linkVisualizacao = `https://drive.google.com/file/d/${driveId}/view?usp=sharing`;
+    const mensagem = `${legenda}\n\n📥 *Clique para baixar sua apostila:*\n${linkVisualizacao}`;
+    await enviarTexto(telefone, mensagem);
+    console.log(`[ZAPI] ✅ Link enviado para ${telefone} | ID: ${driveId}`);
   } catch (e) {
-    console.error('[ZAPI] ❌ Erro doc:', e.response?.data || e.message);
+    console.error('[ZAPI] ❌ Erro link:', e.message);
   }
 }
 
