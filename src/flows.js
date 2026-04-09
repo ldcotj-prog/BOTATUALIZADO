@@ -68,11 +68,11 @@ const DETALHES_APOSTILAS = {
 
 const MSG_BOAS_VINDAS = () => {
   const s = saudacao();
-  return `${s}! 😊 Que bom te ver por aqui!
+  return `${s}! 👋 Que bom ter você aqui!
 
-Eu sou a *assistente da Smart Cursos Unaí* — estou aqui pra te ajudar a chegar lá nessa aprovação! 🏆
+Eu sou o *JARVIS* 🤖 — assistente virtual da *Smart Cursos Unaí*, pronto pra te ajudar a conquistar sua aprovação! 🏆
 
-Antes de tudo, como eu posso te chamar?`;
+Antes de começar, como posso te chamar?`;
 };
 
 const MSG_ACOLHIMENTO = (nome, servico) => {
