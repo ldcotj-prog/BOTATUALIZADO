@@ -15,11 +15,10 @@ async function enviarTexto(telefone, mensagem) {
 
 async function enviarDocumento(telefone, driveId, nomeArquivo, legenda) {
   try {
-    // Usa o endpoint de link direto do Google Drive
     const url = `https://drive.google.com/uc?export=download&confirm=t&id=${driveId}`;
     console.log(`[ZAPI] Enviando doc para ${telefone} | ID: ${driveId}`);
-    const resp = await axios.post(`${config.zapi.baseUrl()}/send-document`,
-      { phone: telefone, document: url, fileName: nomeArquivo, caption: legenda || '' },
+    const resp = await axios.post(`${config.zapi.baseUrl()}/send-file`,
+      { phone: telefone, file: url, fileName: nomeArquivo, caption: legenda || '' },
       { headers: headers() });
     console.log(`[ZAPI] ✅ Doc resp:`, JSON.stringify(resp.data));
   } catch (e) {
