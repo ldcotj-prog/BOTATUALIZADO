@@ -78,8 +78,13 @@ async function processarMensagem(telefone, dados) {
 
   // ---- PALAVRAS GLOBAIS ----
   if (['menu', 'inicio', 'início', 'voltar', 'home'].includes(lower)) {
+    // Se ainda não tem nome, coleta primeiro
+    if (!session.nome) {
+      updateSession(telefone, { etapa: ETAPAS.AGUARDANDO_NOME });
+      return zapi.enviarTexto(telefone, MSG_BOAS_VINDAS());
+    }
     updateSession(telefone, { etapa: ETAPAS.MENU_PRINCIPAL });
-    return zapi.enviarTexto(telefone, MSG_MENU(session.nome || 'amigo(a)'));
+    return zapi.enviarTexto(telefone, MSG_MENU(session.nome));
   }
   if (['sair', 'encerrar', 'tchau', 'obrigado', 'obrigada'].includes(lower)) {
     await zapi.enviarTexto(telefone,
@@ -390,11 +395,14 @@ async function processarComandoAtendente(telefoneAtendente, txt) {
 // LIBERAÇÃO DO PRODUTO APÓS PAGAMENTO
 // ============================================================
 async function liberarProduto(telefone, pag, nome) {
-  const gdUrl = (id) => `https://drive.google.com/uc?export=download&id=${id}`;
+  const nomeExibir = nome || 'aluno(a)';
 
   if (pag.tipo === 'cargo_paracatu' && pag.driveId) {
-    await zapi.enviarDocumento(telefone, gdUrl(pag.driveId), `SmartCursos_${pag.cargoId}.pdf`,
-      `📄 *${pag.produto}*\n_Smart Cursos Unaí — Bons estudos, ${nome}!_ 🎓`
+    await zapi.enviarDocumento(
+      telefone,
+      pag.driveId,
+      `SmartCursos_${pag.cargoId || 'apostila'}.pdf`,
+      `📄 *${pag.produto}*\n_Smart Cursos Unaí — Bons estudos, ${nomeExibir}!_ 🎓`
     );
 
   } else if (pag.tipo === 'combo_paracatu') {
@@ -402,22 +410,24 @@ async function liberarProduto(telefone, pag, nome) {
     for (const area of config.apostilasDigitais.paracatu.areas) {
       for (const cargo of area.cargos) {
         if (cargo.driveId) {
-          await zapi.enviarDocumento(telefone, gdUrl(cargo.driveId), `SmartCursos_${cargo.id}.pdf`,
-            `📄 ${cargo.titulo}`);
-          await sleep(1500);
+          await zapi.enviarDocumento(telefone, cargo.driveId, `SmartCursos_${cargo.id}.pdf`, `📄 ${cargo.titulo}`);
+          await sleep(2000);
         }
       }
     }
 
   } else if (pag.tipo === 'concurso_outro' && pag.driveId) {
-    await zapi.enviarDocumento(telefone, gdUrl(pag.driveId), `SmartCursos_${pag.produto}.pdf`,
+    await zapi.enviarDocumento(
+      telefone,
+      pag.driveId,
+      `SmartCursos_concurso.pdf`,
       `📄 *${pag.produto}*\n_Smart Cursos Unaí — Bons estudos!_ 🎓`
     );
   }
 
   await sleep(500);
   await zapi.enviarTexto(telefone,
-    `🎉 Pronto! Material enviado com sucesso!\n\n💪 Bons estudos, *${nome}*!\n\n_Ficou com dúvidas? É só chamar!_\nDigite *menu* para ver outros produtos. 😊`
+    `🎉 Pronto! Material enviado com sucesso!\n\n💪 Bons estudos, *${nomeExibir}*!\n\n_Ficou com dúvidas? É só chamar!_\nDigite *menu* para ver outros produtos. 😊`
   );
 }
 
