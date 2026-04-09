@@ -230,6 +230,9 @@ async function processarMensagem(telefone, dados) {
     case ETAPAS.COMBO_CONFIRMAR:
       return processarParacatuAreas(telefone, txt, session);
 
+    case ETAPAS.PARACATU_SELECIONAR_AREA:
+      return processarSelecionarArea(telefone, txt, session);
+
     case ETAPAS.PARACATU_CARGOS:
     case ETAPAS.PARACATU_CONFIRMAR_COMPRA:
       return processarParacatuCargos(telefone, txt, session);
@@ -299,11 +302,6 @@ async function enviarMenuParacatu(telefone, nome) {
 }
 
 async function processarParacatuAreas(telefone, txt, session) {
-  // COMBO
-  if (txt === '0' || txt === '2' && session.etapa !== ETAPAS.COMBO_CONFIRMAR) {
-    return apresentarCombo(telefone, session.nome);
-  }
-
   // Dentro do fluxo de confirmação do combo
   if (session.etapa === ETAPAS.COMBO_CONFIRMAR) {
     if (txt === '1') {
@@ -326,17 +324,9 @@ async function processarParacatuAreas(telefone, txt, session) {
     return zapi.enviarTexto(telefone, `Digite *1*, *2* ou *3* 👇`);
   }
 
-  // Ainda não sei meu cargo
-  if (txt === '3') {
-    updateSession(telefone, { etapa: ETAPAS.CONVERSA_LIVRE });
-    return zapi.enviarTexto(telefone,
-      `Sem problema, fico feliz em ajudar! 😊\n\nMe conta um pouco sobre você: qual é a sua formação ou área de atuação? Assim consigo te indicar o cargo mais adequado pra você nesse concurso! 👇`
-    );
-  }
-
-  // Escolha de apostila por cargo
+  // Opção 1: quero apostila do meu cargo → vai para etapa de seleção de área
   if (txt === '1') {
-    updateSession(telefone, { etapa: ETAPAS.PARACATU_AREAS });
+    updateSession(telefone, { etapa: ETAPAS.PARACATU_SELECIONAR_AREA });
     const areas = config.apostilasDigitais.paracatu.areas;
     const linhas = areas.map((a, i) => `*${i+1}️⃣* ${a.emoji} ${a.titulo}`).join('\n');
     return zapi.enviarTexto(telefone,
@@ -344,14 +334,34 @@ async function processarParacatuAreas(telefone, txt, session) {
     );
   }
 
-  // Seleção de área
+  // Opção 2: ver o COMBO
+  if (txt === '2') {
+    return apresentarCombo(telefone, session.nome);
+  }
+
+  // Opção 3: não sei meu cargo
+  if (txt === '3') {
+    updateSession(telefone, { etapa: ETAPAS.CONVERSA_LIVRE });
+    return zapi.enviarTexto(telefone,
+      `Sem problema, fico feliz em ajudar! 😊\n\nMe conta um pouco: qual é a sua formação ou área de atuação? Assim consigo te indicar o cargo mais adequado! 👇`
+    );
+  }
+
+  return zapi.enviarTexto(telefone, `Hmm, não entendi 🤔\n\n${MSG_MENU_PARACATU()}`);
+}
+
+async function processarSelecionarArea(telefone, txt, session) {
+  if (txt === '0') {
+    updateSession(telefone, { etapa: ETAPAS.PARACATU_AREAS });
+    return zapi.enviarTexto(telefone, MSG_MENU_PARACATU());
+  }
   const areas = config.apostilasDigitais.paracatu.areas;
   const area = areas[parseInt(txt) - 1];
-  if (!area) return zapi.enviarTexto(telefone, `Hmm, não encontrei essa opção 🤔\n\n${MSG_MENU_PARACATU()}`);
+  if (!area) return zapi.enviarTexto(telefone, `Hmm, não encontrei essa área 🤔\n\nEscolha de 1 a ${areas.length} ou *0* pra voltar.`);
   updateSession(telefone, { etapa: ETAPAS.PARACATU_CARGOS, areaAtual: area.id });
   const linhas = area.cargos.map((c, i) => `*${i+1}️⃣* ${c.titulo}`).join('\n');
   return zapi.enviarTexto(telefone,
-    `${area.emoji} *${area.titulo}*\n\nQual é o seu cargo? 👇\n\n${linhas}\n\n*0️⃣* ← Voltar\n\n_Dica: se ainda não decidiu, o COMBO por R$49,90 vale muito mais! 😉_`
+    `${area.emoji} *${area.titulo}*\n\nQual é o seu cargo? 👇\n\n${linhas}\n\n*0️⃣* ← Voltar\n\n_Dica: o COMBO por R$49,90 cobre todos os cargos! 😉_`
   );
 }
 
