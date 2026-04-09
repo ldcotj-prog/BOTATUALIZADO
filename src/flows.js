@@ -122,6 +122,10 @@ async function processarMensagem(telefone, dados) {
       await processarParacatuCargos(telefone, txt, session);
       break;
 
+    case ETAPAS.PARACATU_CONFIRMAR_COMPRA:
+      await processarParacatuCargos(telefone, txt, session);
+      break;
+
     case ETAPAS.INFO_TIPO:
       await processarInfoTipo(telefone, txt, session);
       break;
@@ -196,7 +200,11 @@ async function processarMenuPrincipal(telefone, txt, session) {
     '4': () => { updateSession(telefone, { etapa: ETAPAS.ONLINE_MENU }); return enviarMenuOnline(telefone, session.nome); },
     '5': () => zapi.enviarTexto(telefone, `🛒 Veja todos nossos produtos aqui:\n${config.escola.landingPage}\n\nDigite *menu* para voltar! 😊`),
     '6': () => { updateSession(telefone, { etapa: ETAPAS.CONVERSA_LIVRE }); return zapi.enviarTexto(telefone, `🤖 Pode perguntar! Estou aqui para ajudar.\nDigite *menu* a qualquer momento. 😊`); },
-    '7': () => { updateSession(telefone, { etapa: ETAPAS.CONVERSA_LIVRE }); return zapi.enviarTexto(telefone, `👨‍💼 Transferindo para nossa equipe!\n_Atendimento: Seg-Sex 8h-18h | Sáb 8h-12h_ ⏱️`); },
+    '7': async () => {
+      updateSession(telefone, { etapa: ETAPAS.CONVERSA_LIVRE });
+      await zapi.enviarTexto(telefone, `👨‍💼 Transferindo para nossa equipe!\n_Atendimento: Seg-Sex 8h-18h | Sáb 8h-12h_ ⏱️`);
+      await notificarAtendente(telefone, session.nome, 'Menu principal');
+    },
   };
   if (acoes[txt]) return acoes[txt]();
   return zapi.enviarTexto(telefone, `❓ Opção inválida.\n\n${MSG_MENU(session.nome)}`);
@@ -232,23 +240,107 @@ async function processarParacatuAreas(telefone, txt, session) {
   );
 }
 
+// ============================================================
+// CATÁLOGO DE DETALHES DAS APOSTILAS (para apresentação)
+// ============================================================
+const DETALHES_APOSTILAS = {
+  enfermagem:      { paginas: 189, questoes: 'por capítulo', esp: 'SUS, PNAB, Vigilância em Saúde, PNI, SAE, Diagnósticos NANDA-I, Doenças crônicas e transmissíveis' },
+  farmacia:        { paginas: 153, questoes: null,            esp: 'Farmacologia clínica, Assistência farmacêutica, Farmácia hospitalar, Legislação farmacêutica' },
+  radiologia:      { paginas: 138, questoes: '~63',          esp: 'Módulo 5: Direitos Humanos, Dir. Constitucional, Dir. Administrativo, Dir. Penal, CTB, ECA, Legislação Paracatu' },
+  odontologia:     { paginas: 155, questoes: '~60',          esp: 'Diagnóstico de lesões bucais, Clínica odontológica, Saúde bucal coletiva, Ética profissional' },
+  fisioterapia:    { paginas: 208, questoes: 'por capítulo', esp: 'Cinesioterapia, Fisioterapia traumato-ortopédica, Fisioterapia respiratória e cardiovascular, Ética COFFITO' },
+  analises:        { paginas: 214, questoes: '~186',          esp: 'Hematologia, Bioquímica clínica, Microbiologia, Parasitologia, Imunologia, Boas práticas laboratoriais' },
+  vigilancia:      { paginas: 154, questoes: null,            esp: 'Legislação sanitária, ANVISA, Vigilância de alimentos, Vigilância de serviços de saúde, Epidemiologia' },
+  peb:             { paginas: 144, questoes: '~68',          esp: 'Módulo 5: Direitos Humanos, Dir. Constitucional, Dir. Administrativo, Dir. Penal, ECA, Legislação Paracatu' },
+  peb_arte:        { paginas: 199, questoes: '~168',          esp: 'Módulo 5: Direitos Humanos, Dir. Constitucional, Dir. Penal, ECA, Estatuto do Idoso, Legislação Paracatu' },
+  peb_historia:    { paginas: 154, questoes: null,            esp: 'História do Brasil, História de Minas Gerais e Paracatu, Historiografia, Didática do ensino de história' },
+  supervisor:      { paginas: 173, questoes: null,            esp: 'Gestão escolar democrática, Avaliação educacional, LDB/PNE/FUNDEB, Educação inclusiva, Formação de professores' },
+  educador_creche: { paginas: 117, questoes: null,            esp: 'Legislação da primeira infância, Desenvolvimento infantil 0-3 anos, Cuidar e educar na creche, O brincar' },
+  bibliotecario:   { paginas: 196, questoes: null,            esp: 'Biblioteconomia, Catalogação, Gestão de acervos, Biblioteca escolar' },
+  oficial_adm:     { paginas: 264, questoes: null,            esp: 'Administração pública, Direito administrativo, Gestão de documentos, Ética no serviço público' },
+  aux_secretaria:  { paginas: 161, questoes: '~230',          esp: 'Administração pública, Redação oficial, Atendimento ao público, Arquivo e protocolo' },
+  adm_aux:         { paginas: 194, questoes: '~230',          esp: 'Administração geral, Gestão de processos, Comunicação organizacional, Ética profissional' },
+  almoxarifado:    { paginas: 197, questoes: '~230',          esp: 'Gestão de estoques, Almoxarifado e patrimônio, Compras públicas, Licitações' },
+  assist_social:   { paginas: 230, questoes: '~430',          esp: 'Fundamentos do Serviço Social, Ética profissional, ECA, Serviço Social no SUS, Políticas sociais' },
+  contabilidade:   { paginas: 205, questoes: '~430',          esp: 'Contabilidade geral, Escrituração, Orçamento público (PPA/LDO/LOA), LRF, Custos no setor público' },
+  advogado:        { paginas: 135, questoes: '~63',          esp: 'Módulo 5: Dir. Humanos, Dir. Constitucional, Dir. Administrativo, Dir. Penal, CTB, ECA, Legislação Paracatu' },
+  gcm:             { paginas: 182, questoes: '~88',          esp: 'Módulo 5: Dir. Humanos, Segurança Pública (CF art.144), Dir. Penal, Estatuto das Guardas, CTB, ECA, Uso da Força' },
+  psicologia:      { paginas: 136, questoes: '~63',          esp: 'Módulo 5: Dir. Humanos, Dir. Constitucional, Dir. Administrativo, Dir. Penal, ECA, Legislação Paracatu' },
+  vigia:           { paginas: 169, questoes: null,            esp: 'Controle de acesso e rondas, Prevenção de incêndios, Primeiros socorros, Segurança do trabalho, Ética pública' },
+  eng_eletrica_1:  { paginas: 152, questoes: null,            esp: 'Eletrotécnica, Instalações elétricas, Normas técnicas ABNT, Manutenção elétrica predial' },
+  eng_eletrica_2:  { paginas: 152, questoes: null,            esp: 'Continuação: Instalações elétricas avançadas, Projetos elétricos, Normas de segurança' },
+  eng_ambiental:   { paginas: 189, questoes: null,            esp: 'Saneamento ambiental, Gestão ambiental (ISO 14001), Educação ambiental, Ética profissional' },
+  motorista:       { paginas: 204, questoes: '~239',          esp: 'CTB completo, Direção defensiva, Veículos especiais, Saúde ocupacional, História de Paracatu, Simulado final' },
+};
+
 async function processarParacatuCargos(telefone, txt, session) {
   if (txt === '0') {
     updateSession(telefone, { etapa: ETAPAS.PARACATU_AREAS });
     return enviarMenuParacatu(telefone, session.nome);
   }
+
+  // Confirmação de compra (1 = comprar, 2 = voltar)
+  if (session.etapa === ETAPAS.PARACATU_CONFIRMAR_COMPRA) {
+    if (txt === '1') {
+      const pag = session.pagamento;
+      updateSession(telefone, { etapa: ETAPAS.AGUARDANDO_PAGAMENTO });
+      await zapi.enviarTexto(telefone, MSG_PIX(session.nome, pag.produto, pag.valor));
+      await sleep(500);
+      return zapi.enviarTexto(telefone, MSG_AGUARDANDO());
+    }
+    if (txt === '2') {
+      const area = config.apostilasDigitais.paracatu.areas.find(a => a.id === session.areaAtual);
+      updateSession(telefone, { etapa: ETAPAS.PARACATU_CARGOS, pagamento: null });
+      const linhas = area.cargos.map((c, i) => `*${i+1}️⃣* ${c.titulo}`).join('\n');
+      return zapi.enviarTexto(telefone, `${area.emoji} *${area.titulo}*\n\n${linhas}\n\n*0️⃣* ← Voltar`);
+    }
+    return zapi.enviarTexto(telefone, `Digite *1* para comprar ou *2* para voltar. 👇`);
+  }
+
   const area = config.apostilasDigitais.paracatu.areas.find(a => a.id === session.areaAtual);
   if (!area) return enviarMenuParacatu(telefone, session.nome);
   const cargo = area.cargos[parseInt(txt) - 1];
   if (!cargo) return zapi.enviarTexto(telefone, `❓ Opção inválida. Escolha de 1 a ${area.cargos.length} ou 0 para voltar.`);
 
+  // Busca detalhes da apostila
+  const det = DETALHES_APOSTILAS[cargo.id] || { paginas: null, questoes: null, esp: 'Conteúdo conforme edital IBGP' };
+  const questoesInfo = det.questoes ? `\n❓ *${det.questoes} questões comentadas*` : '';
+  const paginasInfo = det.paginas ? `📄 *${det.paginas} páginas*` : '';
+
+  // Apresenta a apostila com detalhes
+  const msgDetalhes =
+`📘 *Apostila ${cargo.titulo}*
+Concurso Paracatu 2026 — IBGP
+
+${paginasInfo}${questoesInfo}
+
+📦 *Módulos Base (todas as apostilas):*
+• Língua Portuguesa (16 tópicos)
+• Raciocínio Lógico (13 tópicos)
+• Noções de Informática (13 tópicos)
+• Conhecimentos Gerais (14 tópicos)
+
+🎯 *Conteúdo Específico — ${cargo.titulo}:*
+${det.esp}
+
+💰 *Valor: ${fmt(config.apostilasDigitais.precoCargo)}*
+_Acesso imediato via PIX após pagamento_
+
+*1️⃣* Comprar agora — R$19,90
+*2️⃣* ← Voltar`;
+
   updateSession(telefone, {
-    etapa: ETAPAS.AGUARDANDO_PAGAMENTO,
-    pagamento: { produto: `Apostila ${cargo.titulo} — Paracatu 2026`, valor: config.apostilasDigitais.precoCargo, tipo: 'cargo_paracatu', cargoId: cargo.id, driveId: cargo.driveId }
+    etapa: ETAPAS.PARACATU_CONFIRMAR_COMPRA,
+    pagamento: {
+      produto: `Apostila ${cargo.titulo} — Paracatu 2026`,
+      valor: config.apostilasDigitais.precoCargo,
+      tipo: 'cargo_paracatu',
+      cargoId: cargo.id,
+      driveId: cargo.driveId
+    }
   });
-  await zapi.enviarTexto(telefone, MSG_PIX(session.nome, `Apostila ${cargo.titulo}`, config.apostilasDigitais.precoCargo));
-  await sleep(500);
-  return zapi.enviarTexto(telefone, MSG_AGUARDANDO());
+
+  return zapi.enviarTexto(telefone, msgDetalhes);
 }
 
 async function enviarApresentacaoPreVest(telefone, nome) {
@@ -259,7 +351,8 @@ async function enviarApresentacaoPreVest(telefone, nome) {
 
 async function processarPreVestInteresse(telefone, txt, session) {
   if (txt === '1') return zapi.enviarTexto(telefone, `🌐 Veja todos os detalhes aqui:\n${config.escola.landingPage}\n\nDigite *menu* para voltar!`);
-  if (txt === '2') { updateSession(telefone, { etapa: ETAPAS.CONVERSA_LIVRE }); return zapi.enviarTexto(telefone, `👨‍💼 Transferindo para matrícula!\nNosso time entra em contato em breve. _Seg-Sex 8h-18h_ ⏱️`); }
+  if (txt === '2') { updateSession(telefone, { etapa: ETAPAS.CONVERSA_LIVRE }); await zapi.enviarTexto(telefone, `👨‍💼 Transferindo para matrícula!
+Nosso time entra em contato em breve. _Seg-Sex 8h-18h_ ⏱️`); await notificarAtendente(telefone, session.nome, 'Pré-vestibular / Matrícula'); }
   if (txt === '3') { updateSession(telefone, { etapa: ETAPAS.MENU_PRINCIPAL }); return zapi.enviarTexto(telefone, MSG_MENU(session.nome)); }
   return zapi.enviarTexto(telefone, `❓ Opção inválida. Digite 1, 2 ou 3.`);
 }
@@ -282,7 +375,8 @@ async function processarInfoTipo(telefone, txt, session) {
   updateSession(telefone, { etapa: ETAPAS.CONVERSA_LIVRE });
   await zapi.enviarTexto(telefone, `${info.detalhe}\n\n*Quer se matricular?*\nNosso atendente vai te ajudar com a matrícula e condições especiais! 😊`);
   await sleep(400);
-  return zapi.enviarTexto(telefone, `👨‍💼 Transferindo para nossa equipe de matrículas!\n_Atendimento: Seg-Sex 8h-18h | Sáb 8h-12h_ ⏱️`);
+  await zapi.enviarTexto(telefone, `👨‍💼 Transferindo para nossa equipe de matrículas!
+_Atendimento: Seg-Sex 8h-18h | Sáb 8h-12h_ ⏱️`); await notificarAtendente(telefone, session.nome, 'Informática / Matrícula');
 }
 
 async function enviarMenuConcursos(telefone, nome) {
@@ -324,7 +418,8 @@ async function processarOnlineMenu(telefone, txt, session) {
   await zapi.enviarTexto(telefone,
     `✅ Ótima escolha! *${curso.titulo}* — ${fmt(curso.valor)}\n\nNosso atendente vai finalizar sua matrícula e te dar acesso à plataforma! 😊`
   );
-  return zapi.enviarTexto(telefone, `👨‍💼 Transferindo para matrícula!\n_Atendimento: Seg-Sex 8h-18h | Sáb 8h-12h_ ⏱️`);
+  await zapi.enviarTexto(telefone, `👨‍💼 Transferindo para matrícula!
+_Atendimento: Seg-Sex 8h-18h | Sáb 8h-12h_ ⏱️`); await notificarAtendente(telefone, session.nome, 'Curso Online / Matrícula');
 }
 
 // ============================================================
@@ -389,6 +484,23 @@ async function processarComandoAtendente(telefoneAtendente, txt) {
     );
     await zapi.enviarTexto(telefoneAtendente, `❌ Pagamento recusado para ${telefoneCliente}`);
   }
+}
+
+// ============================================================
+// NOTIFICAÇÃO AO ATENDENTE
+// ============================================================
+async function notificarAtendente(telefoneCliente, nome, origem) {
+  const hora = new Date().toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit' });
+  const msg =
+`🔔 *NOVO LEAD AGUARDANDO ATENDIMENTO*
+
+👤 Nome: *${nome || 'não informado'}*
+📱 Número: ${telefoneCliente}
+📍 Origem: ${origem}
+🕐 Horário: ${hora}
+
+_Responda diretamente nesse número!_ 👆`;
+  await zapi.enviarTexto(config.escola.numeroAtendimento, msg);
 }
 
 // ============================================================
