@@ -13,12 +13,18 @@ async function enviarTexto(telefone, mensagem) {
   } catch (e) { console.error('[ZAPI] Erro texto:', e.response?.data || e.message); }
 }
 
-async function enviarDocumento(telefone, url, nomeArquivo, legenda) {
+async function enviarDocumento(telefone, driveId, nomeArquivo, legenda) {
   try {
-    await axios.post(`${config.zapi.baseUrl()}/send-document`,
+    // Usa o endpoint de link direto do Google Drive
+    const url = `https://drive.google.com/uc?export=download&confirm=t&id=${driveId}`;
+    console.log(`[ZAPI] Enviando doc para ${telefone} | ID: ${driveId}`);
+    const resp = await axios.post(`${config.zapi.baseUrl()}/send-document`,
       { phone: telefone, document: url, fileName: nomeArquivo, caption: legenda || '' },
       { headers: headers() });
-  } catch (e) { console.error('[ZAPI] Erro doc:', e.response?.data || e.message); }
+    console.log(`[ZAPI] ✅ Doc resp:`, JSON.stringify(resp.data));
+  } catch (e) {
+    console.error('[ZAPI] ❌ Erro doc:', e.response?.data || e.message);
+  }
 }
 
 async function enviarImagem(telefone, url, legenda) {
@@ -34,10 +40,9 @@ async function encaminharParaAtendente(telefoneCliente, nome, produto, imageUrl)
   const msg =
 `🔔 *NOVO COMPROVANTE RECEBIDO*
 
-👤 Cliente: *${nome}*
+👤 Cliente: *${nome || 'desconhecido'}*
 📱 Número: ${telefoneCliente}
 🛒 Produto: *${produto}*
-💰 Aguardando confirmação manual
 
 Responda:
 ✅ *CONFIRMAR ${telefoneCliente}* para liberar
