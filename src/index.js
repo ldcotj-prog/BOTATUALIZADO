@@ -55,7 +55,14 @@ function extrairDados(body) {
 
   // Imagem (comprovante PIX)
   if (body.image) {
-    const url = body.image.imageUrl || body.image.url || body.image.base64;
+    console.log('[IMAGE DEBUG]', JSON.stringify(body.image));
+    const url = body.image.imageUrl
+      || body.image.url
+      || body.image.link
+      || body.image.downloadUrl
+      || body.image.base64
+      || body.image.mediaUrl
+      || '';
     return { tipo: 'imagem', conteudo: url, caption: body.image.caption || '' };
   }
 
