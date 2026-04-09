@@ -3,303 +3,399 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Cursos Unaí — Apostilas, Pré-vestibular e Cursos</title>
+<title>Smart Cursos Unaí — Apostilas Concurso Paracatu 2026</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  :root {
-    --laranja: #D4851F;
-    --laranja-escuro: #B5441A;
-    --preto: #111111;
-    --cinza: #1e1e1e;
-    --cinza-claro: #2a2a2a;
-    --branco: #ffffff;
-    --creme: #f5f0e8;
-  }
+  :root { --laranja: #D4851F; --escuro: #B5441A; --preto: #111; --cinza: #1e1e1e; --cinza2: #2a2a2a; --branco: #fff; }
   body { font-family: 'Segoe UI', sans-serif; background: var(--preto); color: var(--branco); }
-
-  /* HEADER */
-  header { background: linear-gradient(135deg, var(--preto) 0%, #1a0a00 100%); padding: 20px; text-align: center; border-bottom: 3px solid var(--laranja); position: sticky; top: 0; z-index: 100; }
-  .logo { font-size: 1.8rem; font-weight: 900; color: var(--laranja); letter-spacing: 2px; }
+  header { background: linear-gradient(135deg,#1a0800,#2d1200); padding: 18px 20px; text-align: center; border-bottom: 3px solid var(--laranja); position: sticky; top: 0; z-index: 100; }
+  .logo { font-size: 1.6rem; font-weight: 900; color: var(--laranja); letter-spacing: 2px; }
   .logo span { color: var(--branco); }
-  .tagline { font-size: 0.85rem; color: #aaa; margin-top: 4px; }
-
-  /* HERO */
-  .hero { background: linear-gradient(135deg, #1a0800 0%, #2d1200 50%, #1a0800 100%); padding: 60px 20px; text-align: center; }
-  .hero h1 { font-size: 2.2rem; font-weight: 900; color: var(--branco); line-height: 1.2; }
+  .hero { background: linear-gradient(135deg,#1a0800,#2d1200,#1a0800); padding: 50px 20px; text-align: center; }
+  .hero h1 { font-size: 2rem; font-weight: 900; line-height: 1.2; }
   .hero h1 span { color: var(--laranja); }
-  .hero p { color: #ccc; margin: 16px auto; max-width: 600px; font-size: 1.1rem; }
-  .btn-wpp { display: inline-block; background: #25D366; color: white; padding: 16px 36px; border-radius: 50px; font-size: 1.1rem; font-weight: 700; text-decoration: none; margin-top: 24px; transition: transform 0.2s; }
-  .btn-wpp:hover { transform: scale(1.05); }
-
-  /* SEÇÕES */
-  section { padding: 50px 20px; max-width: 1100px; margin: 0 auto; }
-  .section-title { text-align: center; font-size: 1.6rem; font-weight: 800; color: var(--laranja); margin-bottom: 8px; }
-  .section-sub { text-align: center; color: #999; margin-bottom: 36px; }
-  .divider { width: 60px; height: 4px; background: var(--laranja); margin: 12px auto 32px; border-radius: 2px; }
-
-  /* CARDS */
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-  .card { background: var(--cinza); border-radius: 16px; padding: 28px; border: 1px solid #333; transition: transform 0.2s, border-color 0.2s; }
-  .card:hover { transform: translateY(-4px); border-color: var(--laranja); }
-  .card-emoji { font-size: 2.5rem; margin-bottom: 12px; }
-  .card h3 { font-size: 1.15rem; color: var(--branco); margin-bottom: 8px; }
-  .card p { color: #aaa; font-size: 0.9rem; line-height: 1.6; }
-  .card .preco { font-size: 1.4rem; font-weight: 900; color: var(--laranja); margin-top: 16px; }
-  .card .preco-de { font-size: 0.85rem; color: #666; text-decoration: line-through; }
-  .card .badge { display: inline-block; background: var(--laranja-escuro); color: white; font-size: 0.75rem; padding: 3px 10px; border-radius: 20px; margin-bottom: 12px; }
-  .card ul { list-style: none; margin-top: 12px; }
-  .card ul li { color: #bbb; font-size: 0.88rem; padding: 4px 0; }
-  .card ul li::before { content: '✅ '; }
-
-  /* APOSTILAS */
-  .apostilas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-  .apostila-card { background: var(--cinza-claro); border-radius: 12px; padding: 20px; text-align: center; border: 1px solid #333; }
-  .apostila-card h4 { color: var(--branco); font-size: 0.95rem; margin-bottom: 8px; }
-  .apostila-card .val { color: var(--laranja); font-weight: 800; font-size: 1.2rem; }
-
-  /* COMBO BOX */
-  .combo-box { background: linear-gradient(135deg, var(--laranja-escuro), var(--laranja)); border-radius: 20px; padding: 36px; text-align: center; margin: 32px 0; }
-  .combo-box h2 { font-size: 1.8rem; color: white; font-weight: 900; }
-  .combo-box p { color: rgba(255,255,255,0.85); margin: 12px 0; }
-  .combo-box .big-price { font-size: 3rem; font-weight: 900; color: white; }
-
-  /* PROFESSORES */
-  .prof-grid { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
-  .prof-tag { background: var(--cinza-claro); border: 1px solid #444; padding: 8px 16px; border-radius: 30px; font-size: 0.88rem; color: #ddd; }
-  .prof-tag span { color: var(--laranja); font-weight: 700; }
-
-  /* DIFERENCIAIS */
-  .dif-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-  .dif-item { text-align: center; padding: 24px 16px; background: var(--cinza); border-radius: 12px; }
-  .dif-item .icon { font-size: 2rem; margin-bottom: 8px; }
-  .dif-item p { color: #bbb; font-size: 0.9rem; }
-
-  /* CTA FINAL */
-  .cta { background: linear-gradient(135deg, #1a0800, #2d1200); text-align: center; padding: 60px 20px; }
-  .cta h2 { font-size: 2rem; color: var(--branco); margin-bottom: 16px; }
-  .cta p { color: #bbb; margin-bottom: 28px; max-width: 500px; margin-left: auto; margin-right: auto; }
-
-  /* FOOTER */
-  footer { background: #0a0a0a; text-align: center; padding: 24px; color: #555; font-size: 0.85rem; border-top: 1px solid #222; }
-
-  /* RESPONSIVE */
-  @media(max-width: 600px) {
-    .hero h1 { font-size: 1.6rem; }
-    .combo-box .big-price { font-size: 2.2rem; }
-  }
+  .badge-concurso { display: inline-block; background: var(--escuro); color: #fff; padding: 6px 18px; border-radius: 30px; font-size: 0.85rem; margin: 12px 4px; }
+  .combo { background: linear-gradient(135deg,var(--escuro),var(--laranja)); border-radius: 20px; padding: 32px; text-align: center; margin: 20px 0; }
+  .combo h2 { font-size: 1.6rem; font-weight: 900; }
+  .combo .big { font-size: 3rem; font-weight: 900; }
+  .btn { display: inline-block; background: #25D366; color: #fff; padding: 14px 32px; border-radius: 50px; font-size: 1rem; font-weight: 700; text-decoration: none; margin-top: 16px; }
+  .btn-dark { background: #111; margin-top: 20px; }
+  section { padding: 40px 16px; max-width: 1100px; margin: 0 auto; }
+  .sec-title { font-size: 1.4rem; font-weight: 800; color: var(--laranja); text-align: center; margin-bottom: 6px; }
+  .divider { width: 50px; height: 4px; background: var(--laranja); margin: 8px auto 28px; border-radius: 2px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .card { background: var(--cinza); border-radius: 14px; padding: 20px; border: 1px solid #333; transition: transform .2s, border-color .2s; }
+  .card:hover { transform: translateY(-3px); border-color: var(--laranja); }
+  .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .card-emoji { font-size: 1.8rem; }
+  .card h3 { font-size: 1rem; color: var(--branco); }
+  .card .pages { font-size: 0.78rem; color: #888; }
+  .card .price { font-size: 1.3rem; font-weight: 900; color: var(--laranja); margin: 10px 0 6px; }
+  .modulos { margin-top: 10px; }
+  .mod-tag { display: inline-block; background: #333; color: #bbb; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; margin: 2px; }
+  .mod-tag.esp { background: rgba(212,133,31,.2); color: var(--laranja); border: 1px solid var(--laranja); }
+  details { margin-top: 10px; }
+  summary { cursor: pointer; font-size: 0.82rem; color: #aaa; list-style: none; }
+  summary::after { content: ' ▼'; }
+  details[open] summary::after { content: ' ▲'; }
+  .topicos { margin-top: 8px; }
+  .topicos li { font-size: 0.78rem; color: #bbb; padding: 2px 0; list-style: none; }
+  .topicos li::before { content: '• '; color: var(--laranja); }
+  .area-title { font-size: 1.1rem; font-weight: 800; color: var(--laranja); margin: 28px 0 14px; padding-bottom: 6px; border-bottom: 2px solid #333; }
+  .modulos-base { background: var(--cinza2); border-radius: 16px; padding: 24px; margin-bottom: 24px; }
+  .base-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 12px; }
+  .base-item { background: #222; border-radius: 10px; padding: 14px; }
+  .base-item h4 { font-size: 0.9rem; color: var(--branco); margin-bottom: 6px; }
+  .base-item p { font-size: 0.78rem; color: #888; }
+  footer { background: #0a0a0a; text-align: center; padding: 20px; color: #555; font-size: 0.82rem; border-top: 1px solid #222; }
+  @media(max-width:600px) { .hero h1 { font-size: 1.5rem; } .combo .big { font-size: 2.2rem; } }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
   <div class="logo">SMART<span> CURSOS</span> UNAÍ</div>
-  <div class="tagline">📍 Unaí-MG | Sua aprovação é nossa missão 🎓</div>
+  <div style="font-size:.8rem;color:#aaa;margin-top:3px">📍 Unaí-MG | Sua aprovação é nossa missão 🎓</div>
 </header>
 
-<!-- HERO -->
 <div class="hero">
-  <h1>Prepare-se para <span>conquistar</span> sua aprovação</h1>
-  <p>Apostilas, cursos e pré-vestibular para quem leva os estudos a sério. Material de qualidade, professores experientes e foco total em resultados.</p>
-  <a href="https://wa.me/5538999313182?text=Ola" class="btn-wpp">💬 Falar com a gente no WhatsApp</a>
+  <h1>Apostilas <span>Concurso Paracatu 2026</span></h1>
+  <div>
+    <span class="badge-concurso">📋 Banca IBGP</span>
+    <span class="badge-concurso">👥 272 Vagas</span>
+    <span class="badge-concurso">📅 Prova: 23/08/2026</span>
+    <span class="badge-concurso">✅ Conteúdo conforme edital</span>
+  </div>
 </div>
 
-<!-- APOSTILAS PARACATU -->
 <section>
-  <div class="section-title">📄 Apostilas — Concurso Paracatu 2026</div>
-  <div class="divider"></div>
-  <p class="section-sub">IBGP | 312 vagas | Prova: 23/08/2026 — Material completo por cargo</p>
-
-  <div class="combo-box">
+  <div class="combo">
     <h2>🔥 COMBO COMPLETO</h2>
-    <p>Todos os cargos em um único pacote digital</p>
-    <div class="big-price">R$ 49,90</div>
-    <p style="margin-top:8px">📦 Receba <strong>todos os PDFs</strong> imediatamente após o pagamento</p>
-    <a href="https://wa.me/5538999313182?text=PARACATU" class="btn-wpp" style="background:#111;margin-top:20px">Quero o Combo →</a>
+    <p style="color:rgba(255,255,255,.85);margin:8px 0">Todos os cargos + módulos base em um único pacote</p>
+    <div class="big">R$ 49,90</div>
+    <p style="color:rgba(255,255,255,.8);font-size:.9rem;margin-top:8px">📥 Acesso imediato após pagamento via PIX</p>
+    <a href="https://wa.me/5538999313182?text=PARACATU" class="btn btn-dark">Quero o Combo →</a>
   </div>
 
-  <h3 style="color:#aaa;text-align:center;margin-bottom:20px">Ou escolha apostila avulsa por apenas <span style="color:var(--laranja);font-size:1.3rem">R$ 19,90</span></h3>
-
-  <div class="apostilas-grid">
-    <div class="apostila-card"><h4>💉 Enfermagem</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>💊 Farmácia</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>🔬 Radiologia</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>🦷 Odontologia</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>🩺 Fisioterapia</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>🧪 Análises Clínicas</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>🔍 Vigilância Sanitária</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>🎓 PEB</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>🎨 PEB Arte</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>📜 PEB História</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>🏫 Supervisor Escolar</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>🧒 Educador de Creche</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>📖 Bibliotecário</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>📋 Oficial Administrativo</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>📝 Aux. de Secretaria</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>🏢 Adm / Aux. Adm.</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>📦 Almoxarifado</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>🤝 Assistente Social</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>💰 Contabilidade</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>⚖ Advogado</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>👮 GCM</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>🧩 Psicologia</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>🔒 Vigia</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>⚡ Engenharia Elétrica</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>🌿 Eng. Ambiental</h4><div class="val">R$ 19,90</div></div>
-    <div class="apostila-card"><h4>🚗 Motorista</h4><div class="val">R$ 19,90</div></div>
+  <!-- MÓDULOS BASE -->
+  <div class="modulos-base">
+    <div class="sec-title" style="text-align:left;margin-bottom:0">📦 Módulos Base — Presentes em TODAS as apostilas</div>
+    <p style="color:#888;font-size:.85rem;margin-top:4px">Independente do cargo, todas as apostilas incluem os 4 módulos a seguir</p>
+    <div class="base-grid">
+      <div class="base-item">
+        <h4>📘 Módulo 1 — Língua Portuguesa</h4>
+        <p>Interpretação de textos, classes de palavras, verbos, concordância, regência, crase, ortografia, redação oficial — 16 tópicos</p>
+      </div>
+      <div class="base-item">
+        <h4>🧠 Módulo 2 — Raciocínio Lógico</h4>
+        <p>Lógica proposicional, tabelas-verdade, sequências, teoria dos conjuntos, combinatória, probabilidade — 13 tópicos</p>
+      </div>
+      <div class="base-item">
+        <h4>💻 Módulo 3 — Noções de Informática</h4>
+        <p>Windows, Word, Excel, PowerPoint, Teams, internet, segurança da informação, redes, IA — 13 tópicos</p>
+      </div>
+      <div class="base-item">
+        <h4>🌍 Módulo 4 — Conhecimentos Gerais</h4>
+        <p>Paracatu/MG, Minas Gerais, Brasil, história, geografia, economia, saúde pública, atualidades — 14 tópicos</p>
+      </div>
+    </div>
   </div>
-</section>
 
-<!-- PRÉ-VESTIBULAR -->
-<section style="background:var(--cinza);border-radius:24px;margin-top:8px">
-  <div class="section-title">🎓 Pré-Vestibular / ENEM</div>
-  <div class="divider"></div>
+  <!-- SAÚDE -->
+  <div class="area-title">🏥 Área da Saúde</div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">💉</div><div><h3>Enfermagem</h3><div class="pages">189 páginas | Questões comentadas por capítulo</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <div class="modulos"><span class="mod-tag">4 Módulos Base</span><span class="mod-tag esp">+ Específico Enf.</span></div>
+      <details><summary>Ver conteúdo específico</summary>
+        <ul class="topicos">
+          <li>SUS e bases legais</li><li>Política Nacional de Atenção Básica (PNAB)</li>
+          <li>Vigilância em Saúde (SNVS/ANVISA/VIGIÁGUA)</li><li>Programa Nacional de Imunizações (PNI)</li>
+          <li>Controle de doenças crônicas e transmissíveis</li><li>Ciclos de vida — principais ações</li>
+          <li>Sistematização da Assistência de Enfermagem (SAE)</li><li>Diagnósticos NANDA-I</li>
+          <li>Prescrição e evolução de enfermagem</li>
+        </ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">💊</div><div><h3>Farmácia</h3><div class="pages">153 páginas</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <div class="modulos"><span class="mod-tag">4 Módulos Base</span><span class="mod-tag esp">+ Específico Farm.</span></div>
+      <details><summary>Ver conteúdo específico</summary>
+        <ul class="topicos">
+          <li>Farmacologia clínica</li><li>Assistência farmacêutica</li>
+          <li>Farmácia hospitalar</li><li>Legislação farmacêutica</li><li>Controle de medicamentos</li>
+        </ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">🔬</div><div><h3>Radiologia</h3><div class="pages">138 páginas | ~63 questões comentadas</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <div class="modulos"><span class="mod-tag">4 Módulos Base</span><span class="mod-tag esp">+ Módulo 5 (14 tópicos)</span></div>
+      <details><summary>Ver Módulo 5 — Específico</summary>
+        <ul class="topicos">
+          <li>Direitos Humanos</li><li>Direito Constitucional</li><li>Segurança Pública (CF art.144)</li>
+          <li>Direito Administrativo</li><li>Direito Penal — geral e crimes</li>
+          <li>Direito Processual Penal</li><li>Legislações Especiais Federais</li>
+          <li>Estatuto das Guardas Municipais</li><li>CTB — Crimes e Direção Defensiva</li>
+          <li>ECA, Estatuto do Idoso, Uso da Força</li><li>Legislação Municipal Paracatu</li>
+          <li>Exercícios Comentados — Simulado IBGP</li>
+        </ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">🦷</div><div><h3>Odontologia</h3><div class="pages">155 páginas | ~60 questões comentadas</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <div class="modulos"><span class="mod-tag">4 Módulos Base</span><span class="mod-tag esp">+ Específico Odonto.</span></div>
+      <details><summary>Ver conteúdo específico</summary>
+        <ul class="topicos">
+          <li>Diagnóstico e biópsias de lesões bucais</li><li>Clínica odontológica geral</li>
+          <li>Saúde bucal coletiva</li><li>Ética profissional em odontologia</li>
+        </ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">🩺</div><div><h3>Fisioterapia</h3><div class="pages">208 páginas | Questões por capítulo</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <div class="modulos"><span class="mod-tag">4 Módulos Base</span><span class="mod-tag esp">+ Específico Fisio.</span></div>
+      <details><summary>Ver conteúdo específico</summary>
+        <ul class="topicos">
+          <li>Fundamentos históricos da Fisioterapia (COFFITO)</li>
+          <li>Cinesioterapia e exercícios terapêuticos</li>
+          <li>Fisioterapia traumato-ortopédica e desportiva</li>
+          <li>Fisioterapia respiratória e cardiovascular</li>
+          <li>Legislação e ética profissional do fisioterapeuta</li>
+        </ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">🧪</div><div><h3>Técnico em Análises Clínicas</h3><div class="pages">214 páginas | ~186 questões</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <div class="modulos"><span class="mod-tag">4 Módulos Base</span><span class="mod-tag esp">+ Específico Lab.</span></div>
+      <details><summary>Ver conteúdo específico</summary>
+        <ul class="topicos">
+          <li>Hematologia clínica</li><li>Bioquímica clínica</li><li>Microbiologia</li>
+          <li>Parasitologia</li><li>Imunologia</li><li>Boas práticas laboratoriais</li>
+        </ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">🔍</div><div><h3>Vigilância Sanitária</h3><div class="pages">154 páginas</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <div class="modulos"><span class="mod-tag">4 Módulos Base</span><span class="mod-tag esp">+ Específico Vig. San.</span></div>
+      <details><summary>Ver conteúdo específico</summary>
+        <ul class="topicos">
+          <li>Legislação sanitária brasileira</li><li>Normas ANVISA</li>
+          <li>Vigilância de alimentos</li><li>Vigilância de serviços de saúde</li><li>Epidemiologia</li>
+        </ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
+  </div>
+
+  <!-- EDUCAÇÃO -->
+  <div class="area-title">📚 Área da Educação</div>
   <div class="grid">
     <div class="card">
-      <div class="card-emoji">📚</div>
-      <div class="badge">PRESENCIAL + ONLINE</div>
-      <h3>Pré-Vestibular Smart Cursos</h3>
-      <ul>
-        <li>Aulas seg-sex das 19h às 22h</li>
-        <li>Plataforma com aulas gravadas</li>
-        <li>Apostilas trimestrais (~540 questões)</li>
-        <li>Sala de estudos das 8h às 22h</li>
-        <li>Professores especializados</li>
-        <li>Transmissão ao vivo quando necessário</li>
-      </ul>
-      <div class="preco-de">R$ 745,00/mês</div>
-      <div class="preco">R$ 595,90/mês <small style="font-size:0.7rem;color:#aaa">com pontualidade</small></div>
+      <div class="card-header"><div class="card-emoji">🎓</div><div><h3>PEB — Professor de Ed. Básica</h3><div class="pages">144 páginas | ~68 questões</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <div class="modulos"><span class="mod-tag">4 Módulos Base</span><span class="mod-tag esp">+ Módulo 5 (14 tópicos)</span></div>
+      <details><summary>Ver Módulo 5</summary>
+        <ul class="topicos"><li>Direitos Humanos</li><li>Direito Constitucional</li><li>Direito Administrativo</li><li>Direito Penal geral e crimes</li><li>Legislações Especiais</li><li>ECA e Estatuto do Idoso</li><li>Legislação Municipal Paracatu</li><li>Exercícios Comentados IBGP</li></ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
     </div>
     <div class="card">
-      <div class="card-emoji">📝</div>
-      <div class="badge">LOW TICKET</div>
-      <h3>Caderno ENEM Completo</h3>
-      <ul>
-        <li>Teoria completa por área</li>
-        <li>540 questões comentadas</li>
-        <li>3 redações modelo nota 1000</li>
-        <li>Entrega digital imediata</li>
-      </ul>
-      <div class="preco">R$ 39,90</div>
+      <div class="card-header"><div class="card-emoji">🎨</div><div><h3>PEB Arte</h3><div class="pages">199 páginas | ~168 questões</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <div class="modulos"><span class="mod-tag">4 Módulos Base</span><span class="mod-tag esp">+ Módulo 5 (14 tópicos)</span></div>
+      <details><summary>Ver Módulo 5</summary>
+        <ul class="topicos"><li>Direitos Humanos</li><li>Direito Constitucional</li><li>Direito Administrativo</li><li>Direito Penal</li><li>ECA</li><li>Estatuto do Idoso</li><li>Legislação Municipal Paracatu</li></ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
     </div>
     <div class="card">
-      <div class="card-emoji">❓</div>
-      <div class="badge">LOW TICKET</div>
-      <h3>200 Questões ENEM</h3>
-      <ul>
-        <li>Questões das últimas edições</li>
-        <li>Com resolução comentada</li>
-        <li>Entrega digital imediata</li>
-      </ul>
-      <div class="preco">R$ 29,90</div>
+      <div class="card-header"><div class="card-emoji">📜</div><div><h3>PEB História</h3><div class="pages">154 páginas</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <div class="modulos"><span class="mod-tag">4 Módulos Base</span><span class="mod-tag esp">+ Específico Hist.</span></div>
+      <details><summary>Ver conteúdo específico</summary>
+        <ul class="topicos"><li>História do Brasil</li><li>História de Minas Gerais e Paracatu</li><li>Historiografia e metodologia</li><li>Didática do ensino de história</li></ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">🏫</div><div><h3>Supervisor Escolar</h3><div class="pages">173 páginas</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <div class="modulos"><span class="mod-tag">4 Módulos Base</span><span class="mod-tag esp">+ Específico Superv.</span></div>
+      <details><summary>Ver conteúdo específico</summary>
+        <ul class="topicos"><li>Gestão escolar democrática</li><li>Avaliação educacional</li><li>Legislação (LDB, CF/88, ECA, PNE, FUNDEB)</li><li>Educação inclusiva</li><li>Didática e metodologias</li><li>Formação continuada</li><li>Relação escola-família-comunidade</li><li>Ética do servidor</li></ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">🧒</div><div><h3>Educador de Creche</h3><div class="pages">117 páginas</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <div class="modulos"><span class="mod-tag">4 Módulos Base</span><span class="mod-tag esp">+ Específico Creche</span></div>
+      <details><summary>Ver conteúdo específico</summary>
+        <ul class="topicos"><li>Legislação e políticas da primeira infância</li><li>Desenvolvimento infantil 0-3 anos</li><li>O cuidar e o educar na creche</li><li>O brincar e as linguagens da criança</li><li>Ética, inclusão e saúde na creche</li></ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">📖</div><div><h3>Bibliotecário</h3><div class="pages">196 páginas</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <div class="modulos"><span class="mod-tag">4 Módulos Base</span><span class="mod-tag esp">+ Específico Biblio.</span></div>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
     </div>
   </div>
-</section>
 
-<!-- INFORMÁTICA -->
-<section>
-  <div class="section-title">💻 Cursos de Informática</div>
-  <div class="divider"></div>
+  <!-- ADMINISTRATIVA -->
+  <div class="area-title">🗂 Área Administrativa</div>
   <div class="grid">
     <div class="card">
-      <div class="card-emoji">🏫</div>
-      <div class="badge">PRESENCIAL — 120h</div>
-      <h3>Informática Completa</h3>
-      <ul>
-        <li>9 meses | 2x por semana</li>
-        <li>Do básico ao avançado</li>
-        <li>Excel, Word, PowerPoint</li>
-        <li>Internet e segurança digital</li>
-        <li>Certificado reconhecido</li>
-      </ul>
-      <div class="preco">9x R$ 311,92 <small style="color:#aaa;font-size:0.7rem">cartão</small></div>
+      <div class="card-header"><div class="card-emoji">📋</div><div><h3>Oficial Administrativo</h3><div class="pages">264 páginas — maior apostila</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <div class="modulos"><span class="mod-tag">4 Módulos Base</span><span class="mod-tag esp">+ Específico Adm.</span></div>
+      <details><summary>Ver conteúdo específico</summary>
+        <ul class="topicos"><li>Administração pública</li><li>Direito administrativo</li><li>Gestão de documentos</li><li>Ética no serviço público</li><li>Noções de direito constitucional</li></ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
     </div>
     <div class="card">
-      <div class="card-emoji">🏢</div>
-      <div class="badge">INTENSIVO — 3 MESES</div>
-      <h3>Informática Empresarial</h3>
-      <ul>
-        <li>Excel avançado</li>
-        <li>Word e PowerPoint profissional</li>
-        <li>Ferramentas empresariais</li>
-        <li>Ideal para mercado de trabalho</li>
-      </ul>
-      <div class="preco">10x R$ 99,79 <small style="color:#aaa;font-size:0.7rem">cartão</small></div>
+      <div class="card-header"><div class="card-emoji">📝</div><div><h3>Auxiliar de Secretaria</h3><div class="pages">161 páginas | ~230 questões</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <div class="modulos"><span class="mod-tag">4 Módulos Base</span><span class="mod-tag esp">+ Específico Secr.</span></div>
+      <details><summary>Ver conteúdo específico</summary>
+        <ul class="topicos"><li>Noções de administração pública</li><li>Redação oficial e correspondência</li><li>Atendimento ao público</li><li>Relações humanas no trabalho</li><li>Noções de arquivo e protocolo</li></ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
     </div>
     <div class="card">
-      <div class="card-emoji">🌐</div>
-      <div class="badge">ONLINE</div>
-      <h3>Informática Online</h3>
-      <ul>
-        <li>Estude no seu ritmo</li>
-        <li>Acesso de qualquer lugar</li>
-        <li>Plataforma completa</li>
-        <li>Certificado digital</li>
-      </ul>
-      <div class="preco">R$ 297,90 <small style="color:#aaa;font-size:0.7rem">ou 10x no cartão</small></div>
+      <div class="card-header"><div class="card-emoji">🏢</div><div><h3>Administração / Aux. Administrativo</h3><div class="pages">194 páginas | ~230 questões</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">📦</div><div><h3>Almoxarifado</h3><div class="pages">197 páginas | ~230 questões</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <details><summary>Ver conteúdo específico</summary>
+        <ul class="topicos"><li>Gestão de estoques</li><li>Almoxarifado e patrimônio</li><li>Compras públicas e licitações</li></ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">🤝</div><div><h3>Assistente Social</h3><div class="pages">230 páginas | ~430 questões</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <details><summary>Ver conteúdo específico</summary>
+        <ul class="topicos"><li>Fundamentos históricos do Serviço Social</li><li>Ética profissional do assistente social</li><li>ECA</li><li>Serviço Social no SUS</li><li>Políticas sociais e seguridade social</li></ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">💰</div><div><h3>Contabilidade</h3><div class="pages">205 páginas | ~430 questões</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <details><summary>Ver conteúdo específico</summary>
+        <ul class="topicos"><li>Contabilidade geral e patrimônio</li><li>Escrituração contábil e demonstrações financeiras</li><li>Orçamento público (PPA/LDO/LOA)</li><li>Lei de Responsabilidade Fiscal</li><li>Contabilidade de custos no setor público</li><li>Ética profissional do contador</li></ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
     </div>
   </div>
-</section>
 
-<!-- CURSOS ONLINE -->
-<section style="background:var(--cinza);border-radius:24px">
-  <div class="section-title">🌐 Cursos Online Profissionalizantes</div>
-  <div class="divider"></div>
+  <!-- JURÍDICA/SEGURANÇA -->
+  <div class="area-title">⚖ Jurídica / Segurança</div>
   <div class="grid">
-    <div class="card"><div class="card-emoji">🤖</div><h3>IA para Negócios</h3><p>Aprenda a usar inteligência artificial para impulsionar sua carreira e negócios.</p><div class="preco">R$ 397,90</div></div>
-    <div class="card"><div class="card-emoji">📋</div><h3>Auxiliar Administrativo Online</h3><p>Formação completa para atuar no mercado administrativo com certificado.</p><div class="preco">R$ 397,90</div></div>
-    <div class="card"><div class="card-emoji">📊</div><h3>Gestão Empresarial Completo</h3><p>Gestão, liderança, finanças e estratégia para empreendedores e gestores.</p><div class="preco">R$ 297,90</div></div>
-    <div class="card"><div class="card-emoji">⚗️</div><h3>Química para Vestibulares</h3><p>Conteúdo completo + simulados. Do Prof. Lucas Daniel — referência no ENEM.</p><div class="preco">R$ 197,90</div></div>
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">⚖</div><div><h3>Advogado</h3><div class="pages">135 páginas | ~63 questões</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <div class="modulos"><span class="mod-tag">4 Módulos Base</span><span class="mod-tag esp">+ Módulo 5 (14 tópicos)</span></div>
+      <details><summary>Ver Módulo 5</summary>
+        <ul class="topicos"><li>Direitos Humanos</li><li>Direito Constitucional</li><li>Direito Administrativo</li><li>Direito Penal geral</li><li>Crimes em espécie</li><li>Direito Processual Penal</li><li>Legislações Especiais</li><li>Estatuto das Guardas</li><li>CTB</li><li>ECA e Estatuto do Idoso</li><li>Legislação Municipal Paracatu</li></ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">👮</div><div><h3>GCM — Guarda Civil Municipal</h3><div class="pages">182 páginas | ~88 questões</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <div class="modulos"><span class="mod-tag">4 Módulos Base</span><span class="mod-tag esp">+ Módulo 5 (14 tópicos)</span></div>
+      <details><summary>Ver Módulo 5 — Específico GCM</summary>
+        <ul class="topicos"><li>Direitos Humanos</li><li>Segurança Pública — CF art.144</li><li>Direito Administrativo</li><li>Direito Penal geral e crimes em espécie</li><li>Direito Processual Penal</li><li>Estatuto Geral das Guardas Municipais</li><li>CTB — Crimes e Direção Defensiva</li><li>ECA, Estatuto do Idoso e Uso da Força</li><li>Legislação Municipal Paracatu</li><li>Exercícios Comentados IBGP</li></ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">🧩</div><div><h3>Psicologia</h3><div class="pages">136 páginas | ~63 questões</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <div class="modulos"><span class="mod-tag">4 Módulos Base</span><span class="mod-tag esp">+ Módulo 5 (14 tópicos)</span></div>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">🔒</div><div><h3>Vigia</h3><div class="pages">169 páginas</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <details><summary>Ver conteúdo específico</summary>
+        <ul class="topicos"><li>Controle de acesso e rondas</li><li>Prevenção de incêndios</li><li>Primeiros socorros</li><li>Relações humanas no trabalho</li><li>Ética no serviço público (LIMPE)</li><li>Segurança do trabalho (EPI/NR)</li><li>Noções de direito constitucional</li><li>Noções de meio ambiente</li></ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
+  </div>
+
+  <!-- TÉCNICA -->
+  <div class="area-title">⚙ Área Técnica</div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">⚡</div><div><h3>Engenharia Elétrica vol.1</h3><div class="pages">152 páginas</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <details><summary>Ver conteúdo</summary>
+        <ul class="topicos"><li>Eletrotécnica</li><li>Instalações elétricas</li><li>Normas técnicas (ABNT)</li><li>Manutenção elétrica predial</li></ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">⚡</div><div><h3>Engenharia Elétrica vol.2</h3><div class="pages">152 páginas</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">🌿</div><div><h3>Engenheiro Ambiental</h3><div class="pages">189 páginas</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <details><summary>Ver conteúdo específico</summary>
+        <ul class="topicos"><li>Saneamento ambiental (água/esgoto/resíduos)</li><li>Gestão ambiental e ISO 14001</li><li>Educação ambiental e ética profissional</li></ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-emoji">🚗</div><div><h3>Motorista</h3><div class="pages">204 páginas | ~239 questões</div></div></div>
+      <div class="price">R$ 19,90</div>
+      <details><summary>Ver conteúdo específico</summary>
+        <ul class="topicos"><li>CTB completo e crimes de trânsito</li><li>Direção defensiva</li><li>Veículos especiais e cargas</li><li>Tecnologias embarcadas</li><li>Saúde ocupacional para motoristas</li><li>História e geografia de Paracatu</li><li>Noções de direito administrativo</li><li>Simulado final com gabarito</li></ul>
+      </details>
+      <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:.85rem;padding:10px 20px;margin-top:12px">Comprar R$19,90</a>
+    </div>
   </div>
 </section>
 
-<!-- PROFESSORES -->
-<section>
-  <div class="section-title">👩‍🏫 Corpo Docente</div>
-  <div class="divider"></div>
-  <p class="section-sub">Profissionais qualificados e apaixonados pelo que fazem</p>
-  <div class="prof-grid">
-    <div class="prof-tag"><span>Química:</span> Prof. Lucas Daniel</div>
-    <div class="prof-tag"><span>Biologia:</span> Dra. Hérica Ribeiro</div>
-    <div class="prof-tag"><span>Matemática:</span> Camila Kaufmann</div>
-    <div class="prof-tag"><span>Física:</span> Zeuman</div>
-    <div class="prof-tag"><span>Língua Portuguesa:</span> Roselda</div>
-    <div class="prof-tag"><span>História:</span> RodyBritto</div>
-    <div class="prof-tag"><span>Geografia:</span> Anselmo</div>
-    <div class="prof-tag"><span>Atualidades/ENEM:</span> Iury Barbosa</div>
-    <div class="prof-tag"><span>Arte e Filosofia:</span> Cayo Vasconcelos</div>
-    <div class="prof-tag"><span>Sociologia:</span> Samuel Ulisses</div>
-    <div class="prof-tag"><span>Ed. Física:</span> Sérgio Neves</div>
-  </div>
-</section>
-
-<!-- DIFERENCIAIS -->
-<section style="background:var(--cinza);border-radius:24px">
-  <div class="section-title">⭐ Por que escolher a Smart Cursos?</div>
-  <div class="divider"></div>
-  <div class="dif-grid">
-    <div class="dif-item"><div class="icon">📍</div><p>Localização central, próximo à prefeitura de Unaí</p></div>
-    <div class="dif-item"><div class="icon">❄️</div><p>Salas climatizadas com projetores</p></div>
-    <div class="dif-item"><div class="icon">📱</div><p>Plataforma digital com aulas gravadas</p></div>
-    <div class="dif-item"><div class="icon">📚</div><p>Sala de estudos aberta das 8h às 22h</p></div>
-    <div class="dif-item"><div class="icon">💪</div><p>Foco total em aprovação e empregabilidade</p></div>
-    <div class="dif-item"><div class="icon">💳</div><p>PIX, boleto e cartão parcelado</p></div>
-  </div>
-</section>
-
-<!-- CTA FINAL -->
-<div class="cta">
-  <h2>Pronto para começar? 🚀</h2>
-  <p>Fale com nosso assistente agora e receba seu material ou tire suas dúvidas!</p>
-  <a href="https://wa.me/5538999313182?text=Ola" class="btn-wpp" style="font-size:1.2rem;padding:18px 44px">💬 Falar no WhatsApp</a>
-  <p style="margin-top:24px;color:#666;font-size:0.85rem">Seg-Sex 8h às 22h | Sáb 8h às 12h</p>
+<div style="background:linear-gradient(135deg,#1a0800,#2d1200);text-align:center;padding:50px 20px">
+  <h2 style="font-size:1.8rem;margin-bottom:12px">Pronto para começar? 🚀</h2>
+  <p style="color:#bbb;margin-bottom:24px">Pagamento via PIX • Acesso imediato • Conteúdo conforme edital IBGP</p>
+  <a href="https://wa.me/5538999313182?text=PARACATU" class="btn" style="font-size:1.1rem;padding:16px 40px">💬 Comprar no WhatsApp</a>
 </div>
 
-<!-- FOOTER -->
 <footer>
   <p><strong>Smart Cursos Unaí Ltda</strong> — CNPJ: 31.852.681/0001-40</p>
   <p style="margin-top:6px">Rua Nossa Senhora do Carmo, 45 — 1º andar — Centro — Unaí/MG</p>
 </footer>
-
 </body>
 </html>
