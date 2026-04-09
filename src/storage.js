@@ -18,6 +18,7 @@ const ETAPAS = {
   // Cursos online
   ONLINE_MENU:           'online_menu',
   // Confirmação antes do pagamento
+  COMBO_CONFIRMAR:           'combo_confirmar',
   PARACATU_CONFIRMAR_COMPRA: 'paracatu_confirmar_compra',
   // Pagamento
   AGUARDANDO_PAGAMENTO:  'aguardando_pagamento',
