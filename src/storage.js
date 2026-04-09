@@ -1,30 +1,36 @@
 const sessions = new Map();
 
 const ETAPAS = {
-  INICIO:                'inicio',
-  AGUARDANDO_NOME:       'aguardando_nome',
-  MENU_PRINCIPAL:        'menu_principal',
-  // Apostilas Paracatu
-  PARACATU_AREAS:        'paracatu_areas',
-  PARACATU_CARGOS:       'paracatu_cargos',
-  PARACATU_COMBO:        'paracatu_combo',         // escolheu combo, aguardando pagamento
-  PARACATU_CARGO_PAG:    'paracatu_cargo_pag',     // escolheu cargo, aguardando pagamento
-  // Pré-vestibular
-  PRE_VEST_INTERESSE:    'pre_vest_interesse',
-  // Informática
-  INFO_TIPO:             'info_tipo',
-  // Concursos
-  CONCURSOS_MENU:        'concursos_menu',
-  // Cursos online
-  ONLINE_MENU:           'online_menu',
-  // Confirmação antes do pagamento
-  COMBO_CONFIRMAR:             'combo_confirmar',
-  PARACATU_SELECIONAR_AREA:    'paracatu_selecionar_area',
-  PARACATU_CONFIRMAR_COMPRA:   'paracatu_confirmar_compra',
-  // Pagamento
-  AGUARDANDO_PAGAMENTO:  'aguardando_pagamento',
-  // Conversa livre
-  CONVERSA_LIVRE:        'conversa_livre',
+  INICIO:                       'inicio',
+  AGUARDANDO_NOME:              'aguardando_nome',
+  AGUARDANDO_CIDADE:            'aguardando_cidade',
+  AGUARDANDO_NOME_COM_INTENCAO: 'aguardando_nome_com_intencao',
+  MENU_PRINCIPAL:               'menu_principal',
+
+  // Seleção de concurso/cidade
+  APOSTILAS_CIDADE:             'apostilas_cidade',
+
+  // Paracatu
+  PARACATU_AREAS:               'paracatu_areas',
+  PARACATU_SELECIONAR_AREA:     'paracatu_selecionar_area',
+  PARACATU_CARGOS:              'paracatu_cargos',
+  PARACATU_CONFIRMAR_COMPRA:    'paracatu_confirmar_compra',
+  COMBO_CONFIRMAR:              'combo_confirmar',
+
+  // Buritis
+  BURITIS_AREAS:                'buritis_areas',
+  BURITIS_CARGOS:               'buritis_cargos',
+  BURITIS_CONFIRMAR_COMPRA:     'buritis_confirmar_compra',
+  BURITIS_COMBO_CONFIRMAR:      'buritis_combo_confirmar',
+
+  // Outros
+  PRE_VEST_INTERESSE:           'pre_vest_interesse',
+  INFO_TIPO:                    'info_tipo',
+  CONCURSOS_MENU:               'concursos_menu',
+  ONLINE_MENU:                  'online_menu',
+  MATRICULA_MENU:               'matricula_menu',
+  AGUARDANDO_PAGAMENTO:         'aguardando_pagamento',
+  CONVERSA_LIVRE:               'conversa_livre',
 };
 
 function getSession(telefone) {
@@ -32,9 +38,14 @@ function getSession(telefone) {
     sessions.set(telefone, {
       etapa: ETAPAS.INICIO,
       nome: null,
-      servico: null,          // serviço detectado pelo anúncio
+      cidade: null,
+      servico: null,
       areaAtual: null,
-      pagamento: null,        // { produto, valor, arquivos: [] }
+      concursoAtual: null,   // 'paracatu' | 'buritis'
+      intencaoPendente: null,
+      pagamento: null,
+      atendimentoHumano: false,
+      remarketingIndice: 0,
       historico: [],
       ultimaMensagem: Date.now()
     });
@@ -50,12 +61,12 @@ function updateSession(telefone, dados) {
 
 function resetSession(telefone) { sessions.delete(telefone); }
 
-// Limpa sessões inativas há mais de 3h
+// Limpa sessões inativas há mais de 48h
 setInterval(() => {
-  const limite = Date.now() - 10800000;
+  const limite = Date.now() - 172800000;
   for (const [tel, s] of sessions.entries()) {
     if (s.ultimaMensagem < limite) sessions.delete(tel);
   }
-}, 1800000);
+}, 3600000);
 
 module.exports = { getSession, updateSession, resetSession, ETAPAS };
